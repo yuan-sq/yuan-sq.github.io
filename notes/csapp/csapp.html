@@ -4,15 +4,59 @@
     <meta charset="UTF-8">
     <title>CS:APP Notes</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        /* 新增：区分文件类型的样式 */
+        .file-type {
+            font-size: 0.8em;
+            color: #666;
+            margin-left: 8px;
+        }
+        .file-type.html { color: #4CAF50; }  /* HTML 文件绿色 */
+        .file-type.mm { color: #2196F3; }    /* 思维导图蓝色 */
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>CS:APP Notes</h1>
-        <ul class="note-list">
-            <li><a href="1-basics.html">1. Basics of Computer Systems</a></li>
-            <li><a href="2-memory.mm">2. Memory Hierarchy (Mind Map)</a></li>
-            <!-- 其他笔记 -->
+        <ul class="note-list" id="noteList">
+            <!-- 笔记列表将通过 JavaScript 动态生成 -->
         </ul>
     </div>
+
+    <script>
+        // 定义笔记文件列表（按章节排序）
+        const notes = [
+            { name: "信息的表示和处理", file: "信息的表示和处理.html", type: "html" },
+            { name: "程序的机器级表示", file: "程序的机器级表示.html", type: "html" },
+            { name: "处理器体系结构", file: "链接+处理器体系结构.html", type: "html" },
+            { name: "存储器体系结构", file: "存储器体系结构.html", type: "html" },
+            { name: "异常控制流", file: "八 异常控制流.html", type: "html" },
+            { name: "虚拟内存", file: "九 虚拟内存.html", type: "html" },
+            { name: "虚拟内存（补充）", file: "九.5.html", type: "html" },
+            { name: "系统级I/O", file: "10 系统级IO.html", type: "html" },
+            { name: "系统级I/O（思维导图）", file: "10 系统级IO.mm", type: "mm" },
+            { name: "网络编程", file: "十一 网络编程.html", type: "html" },
+            { name: "并发编程", file: "十二 并发编程.html", type: "html" }
+        ];
+
+        // 动态生成笔记列表
+        const noteList = document.getElementById('noteList');
+        notes.forEach(note => {
+            const li = document.createElement('li');
+            
+            // 处理 .mm 文件（跳转到渲染页）
+            const link = note.type === 'mm' 
+                ? note.file.replace('.mm', '.html')  // 指向渲染页（如 10 系统级IO.html）
+                : note.file;
+            
+            li.innerHTML = `
+                <a href="${link}">
+                    ${note.name}
+                    <span class="file-type ${note.type}">${note.type.toUpperCase()}</span>
+                </a>
+            `;
+            noteList.appendChild(li);
+        });
+    </script>
 </body>
 </html>
