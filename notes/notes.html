@@ -2,24 +2,221 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Notes</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5', // 主色调：靛蓝色
+                        secondary: '#10B981', // 辅助色：绿色
+                        neutral: '#F3F4F6', // 中性色：浅灰
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .note-card {
+                @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100;
+            }
+            .note-icon {
+                @apply w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 flex-shrink-0;
+            }
+            .gradient-bg {
+                @apply bg-gradient-to-br from-primary/90 to-primary;
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Notes</h1>
-        <ul class="note-list">
-            <li><a href="csapp/csapp.html">计算机系统基础 CS:APP</a></li>
-            <li><a href="formal methods/fm.html">形式化方法</a></li>
-            <li><a href="https://tjucic.notion.site/osnote">操作系统</a></li>
-            <li><a href="https://tjucic.notion.site/jiwangnotes">计算机网络</a></li>
-            <li><a href="notExists.html">数据库系统</a></li>
-            <li><a href="notExists.html">算法设计与分析</a></li>
-            <li><a href="notExists.html">数据结构</a></li>
-            <li><a href="https://funky-dolphin-763.notion.site/maogai?source=copy_link">毛泽东思想和中国特色社会主义概论</a></li>
+<body class="bg-gray-50 font-inter min-h-screen">
+    <!-- 顶部装饰条 -->
+    <div class="gradient-bg h-2 w-full"></div>
+
+    <div class="container mx-auto px-4 py-8 md:py-16 max-w-5xl">
+        <!-- 页面标题区域 -->
+        <header class="mb-12 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-bg mb-4 mx-auto">
+                <i class="fa fa-book text-white text-2xl"></i>
+            </div>
+            <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-gray-800 mb-3 tracking-tight">My Study Notes</h1>
+            <p class="text-gray-500 max-w-2xl mx-auto">A collection of study materials and notes for various courses</p>
             
-            <!-- 其他笔记分类 -->
+            <!-- 装饰线 -->
+            <div class="w-24 h-1 bg-secondary/70 mx-auto mt-6 rounded-full"></div>
+        </header>
+
+        <!-- 笔记列表区域 -->
+        <ul class="note-list grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 计算机系统基础 -->
+            <li>
+                <a href="csapp/csapp.html" class="block group">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-blue-500 group-hover:bg-blue-600 transition-colors">
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">计算机系统基础(1和2)</h3>
+                                <p class="text-gray-500 text-sm mt-1">Fundamentals of computer systems</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-arrow-right text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <!-- 形式化方法 -->
+            <li>
+                <a href="formal methods/fm.html" class="block group">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-purple-500 group-hover:bg-purple-600 transition-colors">
+                                <i class="fa fa-code"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">形式化方法</h3>
+                                <p class="text-gray-500 text-sm mt-1">Formal methods in computer science</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-arrow-right text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <!-- 操作系统 -->
+            <li>
+                <a href="https://tjucic.notion.site/osnote" class="block group" target="_blank" rel="noopener">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-green-500 group-hover:bg-green-600 transition-colors">
+                                <i class="fa fa-cogs"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">操作系统</h3>
+                                <p class="text-gray-500 text-sm mt-1">Operating systems concepts</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-external-link text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <!-- 计算机网络 -->
+            <li>
+                <a href="https://tjucic.notion.site/jiwangnotes" class="block group" target="_blank" rel="noopener">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-teal-500 group-hover:bg-teal-600 transition-colors">
+                                <i class="fa fa-wifi"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">计算机网络</h3>
+                                <p class="text-gray-500 text-sm mt-1">Computer network fundamentals</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-external-link text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <!-- 数据库系统 -->
+            <li>
+                <a href="https://tjucic.notion.site/databasenotes" class="block group" target="_blank" rel="noopener">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-amber-500 group-hover:bg-amber-600 transition-colors">
+                                <i class="fa fa-database"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">数据库系统</h3>
+                                <p class="text-gray-500 text-sm mt-1">Database systems concepts</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-external-link text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <!-- 毛泽东思想 -->
+            <li>
+                <a href="https://funky-dolphin-763.notion.site/maogai?source=copy_link" class="block group" target="_blank" rel="noopener">
+                    <div class="note-card p-6 hover:-translate-y-1">
+                        <div class="flex items-start">
+                            <div class="note-icon bg-red-500 group-hover:bg-red-600 transition-colors">
+                                <i class="fa fa-book"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg text-gray-800 group-hover:text-primary transition-colors">毛泽东思想和中国特色社会主义概论</h3>
+                                <p class="text-gray-500 text-sm mt-1">Political theory and ideology</p>
+                            </div>
+                            <div class="ml-auto transform group-hover:translate-x-1 transition-transform">
+                                <i class="fa fa-external-link text-gray-400 group-hover:text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
         </ul>
+
+        <!-- 页脚区域 -->
+        <footer class="mt-16 text-center text-gray-500 text-sm">
+            <p>Updated: 2024 Study Notes Collection</p>
+            <p class="mt-2">
+                <i class="fa fa-pencil-square-o mr-1"></i> Organized for efficient learning
+            </p>
+        </footer>
     </div>
+
+    <!-- 简单的交互脚本 -->
+    <script>
+        // 为所有笔记卡片添加进入动画
+        document.addEventListener('DOMContentLoaded', () => {
+            const notes = document.querySelectorAll('.note-card');
+            
+            // 观察元素是否进入视口
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // 延迟动画，创建错落有致的效果
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            // 初始化动画状态
+            notes.forEach(note => {
+                note.style.opacity = '0';
+                note.style.transform = 'translateY(20px)';
+                note.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(note);
+            });
+        });
+    </script>
 </body>
 </html>
