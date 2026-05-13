@@ -1,0 +1,1 @@
+import{o as a,c as s,a as l,d as r,t as n,n as i}from"./index-0_9hHTvH.js";const u={__name:"StatusPill",props:{status:{type:String,required:!0},label:{type:String,required:!0}},setup(e){return(o,t)=>(a(),s("span",{class:i(["pill",`pill-${e.status}`])},[t[0]||(t[0]=l("span",{class:"pill-dot"},null,-1)),r(" "+n(e.label),1)],2))}};export{u as _};

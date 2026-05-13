@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Album | TJU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #070604;
+            --panel: rgba(16, 13, 8, 0.74);
+            --gold: #d7b46a;
+            --gold-bright: #ffe3a0;
+            --gold-deep: #8e6930;
+            --text: #f6edda;
+            --muted: #b8a98a;
+            --shadow: rgba(0, 0, 0, 0.55);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 20% 8%, rgba(215, 180, 106, 0.18), transparent 28rem),
+                radial-gradient(circle at 82% 18%, rgba(142, 105, 48, 0.22), transparent 24rem),
+                linear-gradient(135deg, #020201 0%, #0d0a06 48%, #161006 100%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+
+        body::before {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            content: "";
+            background-image:
+                linear-gradient(rgba(255, 227, 160, 0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 227, 160, 0.055) 1px, transparent 1px);
+            background-size: 72px 72px;
+            mask-image: radial-gradient(circle at center, black, transparent 78%);
+        }
+
+        .album {
+            width: min(1180px, calc(100vw - 32px));
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 32px 0 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 38px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: color 0.22s ease, transform 0.22s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold-bright);
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 4.7rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: 0;
+            color: var(--gold-bright);
+            text-shadow: 0 0 28px rgba(215, 180, 106, 0.25);
+        }
+
+        .subtitle {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .gallery {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .stage {
+            position: relative;
+            min-height: min(64vh, 680px);
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr) 72px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 100%;
+            height: min(64vh, 680px);
+            min-height: 380px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 227, 160, 0.34);
+            border-radius: 8px;
+            background:
+                linear-gradient(145deg, rgba(255, 227, 160, 0.16), transparent 28%),
+                var(--panel);
+            box-shadow:
+                0 30px 70px var(--shadow),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 48px rgba(215, 180, 106, 0.07);
+            overflow: hidden;
+        }
+
+        .photo-frame::before,
+        .photo-frame::after {
+            position: absolute;
+            inset: 16px;
+            content: "";
+            pointer-events: none;
+            border: 1px solid rgba(215, 180, 106, 0.32);
+        }
+
+        .photo-frame::after {
+            inset: 24px;
+            border-color: rgba(255, 227, 160, 0.14);
+        }
+
+        .photo-frame img {
+            position: relative;
+            z-index: 1;
+            max-width: calc(100% - 48px);
+            max-height: calc(100% - 48px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.985);
+            filter: saturate(1.06) contrast(1.04);
+            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.52);
+            transition: opacity 0.28s ease, transform 0.34s ease;
+        }
+
+        .photo-frame img.is-loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .nav-button {
+            width: 58px;
+            height: 58px;
+            border: 1px solid rgba(255, 227, 160, 0.38);
+            border-radius: 999px;
+            background: rgba(12, 10, 7, 0.72);
+            color: var(--gold-bright);
+            cursor: pointer;
+            box-shadow: 0 12px 34px rgba(0, 0, 0, 0.42);
+            transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+
+        .nav-button span {
+            display: block;
+            margin-top: -5px;
+            font-size: 3.2rem;
+            line-height: 1;
+        }
+
+        .nav-button:hover,
+        .nav-button:focus-visible {
+            border-color: var(--gold-bright);
+            background: rgba(72, 52, 22, 0.82);
+            transform: scale(1.08);
+            outline: none;
+        }
+
+        .photo-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            color: var(--gold-bright);
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .photo-meta span:last-child {
+            color: var(--muted);
+        }
+
+        .dock {
+            width: min(720px, 100%);
+            min-height: 96px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 14px;
+            border: 1px solid rgba(255, 227, 160, 0.24);
+            border-radius: 8px;
+            background: linear-gradient(180deg, rgba(30, 23, 12, 0.72), rgba(8, 7, 5, 0.84));
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(18px);
+        }
+
+        .dock-item {
+            width: 68px;
+            height: 68px;
+            padding: 0;
+            border: 1px solid rgba(255, 227, 160, 0.22);
+            border-radius: 8px;
+            background: #080705;
+            cursor: pointer;
+            overflow: hidden;
+            transform-origin: bottom center;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .dock-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .dock-item:hover,
+        .dock-item:focus-visible {
+            border-color: rgba(255, 227, 160, 0.72);
+            transform: translateY(-12px) scale(1.42);
+            outline: none;
+            box-shadow: 0 18px 28px rgba(0, 0, 0, 0.42);
+            z-index: 2;
+        }
+
+        .dock-item.is-active {
+            border-color: var(--gold-bright);
+            transform: translateY(-10px) scale(1.28);
+            box-shadow: 0 0 0 3px rgba(215, 180, 106, 0.16), 0 18px 28px rgba(0, 0, 0, 0.42);
+        }
+
+        @media (max-width: 760px) {
+            .album {
+                width: min(100% - 24px, 620px);
+                padding-top: 20px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .stage {
+                min-height: 56vh;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .photo-frame {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                height: 56vh;
+                min-height: 320px;
+            }
+
+            .nav-button {
+                grid-row: 2;
+                width: 100%;
+                height: 48px;
+                border-radius: 8px;
+            }
+
+            .nav-button--prev {
+                grid-column: 1;
+            }
+
+            .nav-button--next {
+                grid-column: 2;
+            }
+
+            .nav-button span {
+                margin-top: -6px;
+                font-size: 2.6rem;
+            }
+
+            .dock {
+                min-height: 82px;
+                justify-content: flex-start;
+                overflow-x: auto;
+            }
+
+            .dock-item {
+                width: 58px;
+                height: 58px;
+                flex: 0 0 auto;
+            }
+
+            .dock-item:hover,
+            .dock-item:focus-visible,
+            .dock-item.is-active {
+                transform: translateY(-6px) scale(1.12);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="album">
+        <header class="topbar">
+            <a href="index.html" class="back-link">← Back</a>
+            <div>
+                <h1>Photos</h1>
+                <p class="subtitle">Personal Album</p>
+            </div>
+        </header>
+
+        <div id="gallery" class="gallery"></div>
+    </main>
+
+    <script src="js/photos.js"></script>
+</body>
+</html>
