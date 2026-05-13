@@ -1,9 +1,15 @@
+const hiddenPhotoNumbers = new Set([4, 5, 6, 8, 22]);
+const dockWindowSize = 5;
+
 const photos = Array.from({ length: 36 }, (_, index) => {
   const number = String(index + 1).padStart(2, '0');
   return {
     src: `photos/album-${number}.jpg`,
     title: `Photo ${number}`,
   };
+}).filter((photo, index) => {
+  const fileName = photo.src.split('/').pop();
+  return !fileName.startsWith('n') && !hiddenPhotoNumbers.has(index + 1);
 });
 
 (function () {
@@ -36,17 +42,6 @@ const photos = Array.from({ length: 36 }, (_, index) => {
   const previousButton = gallery.querySelector('.nav-button--prev');
   const nextButton = gallery.querySelector('.nav-button--next');
 
-  photos.forEach((photo, index) => {
-    const button = document.createElement('button');
-    button.className = 'dock-item';
-    button.type = 'button';
-    button.setAttribute('role', 'listitem');
-    button.setAttribute('aria-label', `Show ${photo.title}`);
-    button.innerHTML = `<img src="${photo.src}" alt="">`;
-    button.addEventListener('click', () => showPhoto(index));
-    dock.appendChild(button);
-  });
-
   function showPhoto(index) {
     current = (index + photos.length) % photos.length;
     const photo = photos[current];
@@ -57,9 +52,34 @@ const photos = Array.from({ length: 36 }, (_, index) => {
     activePhoto.alt = photo.title;
     photoCounter.textContent = `${current + 1} / ${photos.length}`;
 
-    [...dock.children].forEach((item, itemIndex) => {
-      item.classList.toggle('is-active', itemIndex === current);
-      item.setAttribute('aria-current', itemIndex === current ? 'true' : 'false');
+    renderDock();
+  }
+
+  function getNearbyIndices() {
+    const visibleCount = Math.min(dockWindowSize, photos.length);
+    const before = Math.floor(visibleCount / 2);
+    const start = current - before;
+
+    return Array.from({ length: visibleCount }, (_, offset) => {
+      return (start + offset + photos.length) % photos.length;
+    });
+  }
+
+  function renderDock() {
+    dock.innerHTML = '';
+
+    getNearbyIndices().forEach((photoIndex) => {
+      const photo = photos[photoIndex];
+      const button = document.createElement('button');
+      button.className = 'dock-item';
+      button.type = 'button';
+      button.setAttribute('role', 'listitem');
+      button.setAttribute('aria-label', `Show ${photo.title}`);
+      button.setAttribute('aria-current', photoIndex === current ? 'true' : 'false');
+      button.classList.toggle('is-active', photoIndex === current);
+      button.innerHTML = `<img src="${photo.src}" alt="">`;
+      button.addEventListener('click', () => showPhoto(photoIndex));
+      dock.appendChild(button);
     });
   }
 
